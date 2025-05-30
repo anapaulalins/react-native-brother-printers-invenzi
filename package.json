@@ -1,5 +1,5 @@
 {
-  "name": "@w3lcome/react-native-brother-printers",
+  "name": "@analins/react-native-brother-printers-invenzi",
   "title": "React Native Brother Printers",
   "version": "0.1.7",
   "description": "A package that allows you to printer with brother printers",
@@ -18,8 +18,8 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/W3lcomeApp/react-native-brother-printers.git",
-    "baseUrl": "https://github.com/W3lcomeApp/react-native-brother-printers"
+    "url": "git+https://github.com/anapaulalins/react-native-brother-printers-invenzi.git",
+    "baseUrl": "https://github.com/anapaulalins/react-native-brother-printers-invenzi"
   },
   "keywords": [
     "react-native",
