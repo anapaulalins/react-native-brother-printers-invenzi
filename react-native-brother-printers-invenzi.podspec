@@ -22,8 +22,7 @@ Pod::Spec.new do |s|
   s.user_target_xcconfig = { 'ENABLE_BITCODE' => 'NO' }
 
   # Aqui você define a dependência do SDK da Brother (sem bitcode)
-#  s.dependency "BRLMPrinterKit", '4.12.0'
-s.dependency "BRLMPrinterKit", '4.11.0'
+ s.dependency "BRLMPrinterKit", '4.12.0'
 
   s.dependency "React"
 end
