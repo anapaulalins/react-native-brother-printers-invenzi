@@ -233,6 +233,7 @@
 
 #import "ReactNativeBrotherPrinters.h"
 #import <React/RCTConvert.h>
+#import <BRLMPrinterKit/BRLMPrintSettings.h> 
 
 @implementation ReactNativeBrotherPrinters
 
