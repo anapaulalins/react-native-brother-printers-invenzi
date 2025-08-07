@@ -21,7 +21,7 @@ Pod::Spec.new do |s|
   s.pod_target_xcconfig = { 'ENABLE_BITCODE' => 'NO' }
   s.user_target_xcconfig = { 'ENABLE_BITCODE' => 'NO' }
 
- s.dependency "BRLMPrinterKit", '4.0.2.1'
+ s.dependency "BRLMPrinterKit", '4.12.0'
 
   s.dependency "React"
 end
