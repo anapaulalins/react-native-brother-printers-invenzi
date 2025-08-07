@@ -18,8 +18,8 @@ Pod::Spec.new do |s|
   s.requires_arc  = true
   s.resources     = "ios/**/*.plist"
 
-  s.pod_target_xcconfig = { 'ENABLE_BITCODE' => 'NO' }
-  s.user_target_xcconfig = { 'ENABLE_BITCODE' => 'NO' }
+  # s.pod_target_xcconfig = { 'ENABLE_BITCODE' => 'NO' }
+  # s.user_target_xcconfig = { 'ENABLE_BITCODE' => 'NO' }
 
  s.dependency "BRLMPrinterKit", '4.12.0'
 
