@@ -3,6 +3,10 @@
 #import "ReactNativeBrotherPrinters.h"
 #import <React/RCTConvert.h>
 
+// Importação necessária para as novas classes de configuração de impressão
+#import <BRLMPrinterKit/BRLMPrinterKit.h>
+
+
 @implementation ReactNativeBrotherPrinters
 
 NSString *const DISCOVER_READERS_ERROR = @"DISCOVER_READERS_ERROR";
@@ -22,7 +26,6 @@ RCT_EXPORT_MODULE()
 - (NSArray<NSString *> *)supportedEvents {
     return @[
         @"onBrotherLog",
-
         @"onDiscoverPrinters",
     ];
 }
@@ -96,44 +99,77 @@ RCT_REMAP_METHOD(printImage, deviceInfo:(NSDictionary *)device printerUri: (NSSt
     }
 
     BRLMPrinterDriver *printerDriver = driverGenerateResult.driver;
-
     BRLMPrinterModel model = [BRLMPrinterClassifier transferEnumFromString:deviceInfo.strModelName];
-    BRLMQLPrintSettings *qlSettings = [[BRLMQLPrintSettings alloc] initDefaultPrintSettingsWithPrinterModel:model];
-
-    qlSettings.autoCut = true;
-
-    if (options[@"autoCut"]) {
-        qlSettings.autoCut = [options[@"autoCut"] boolValue];
-    }
-
-    if (options[@"labelSize"]) {
-        qlSettings.labelSize = [options[@"labelSize"] intValue];
-    }
-
-    if (options[@"isHighQuality"]) {
-        if ([options[@"isHighQuality"] boolValue]) {
-            qlSettings.printQuality = BRLMPrintSettingsPrintQualityBest;
-            NSLog(@"High Quality is enabled");
-        } else {
-            qlSettings.printQuality = BRLMPrintSettingsPrintQualityFast;
-            NSLog(@"High Quality is disabled");
+    
+    id printSettings; // Usamos 'id' para que a variável possa ser de qualquer tipo
+    
+    // --- Lógica Condicional para rolos contínuos vs. etiquetas die-cut ---
+    if ([options[@"paperKind"] isEqualToString:@"continuous"]) {
+        // Se for rolo contínuo, usamos BRLMPrintSettings
+        BRLMPrintSettings *continuousPrintSettings = [[BRLMPrintSettings alloc] initDefaultPrintSettingsWithPrinterModel:model];
+        continuousPrintSettings.paperKind = BRLMPrintSettingsPaperKindContinuous;
+        
+        // As propriedades que se aplicam a ambos podem ser aplicadas aqui
+        if (options[@"autoCut"]) {
+            continuousPrintSettings.autoCut = [options[@"autoCut"] boolValue];
         }
-    }
-
-    if (options[@"isHalftoneErrorDiffusion"]) {
-        if ([options[@"isHalftoneErrorDiffusion"] boolValue]) {
-            qlSettings.halftone = BRLMPrintSettingsHalftoneErrorDiffusion;
-            NSLog(@"Error Diffusion is enabled");
-        } else {
-            qlSettings.halftone = BRLMPrintSettingsHalftoneThreshold;
-            NSLog(@"Error Diffusion is disabled");
+        if (options[@"isHighQuality"]) {
+            if ([options[@"isHighQuality"] boolValue]) {
+                continuousPrintSettings.printQuality = BRLMPrintSettingsPrintQualityBest;
+            } else {
+                continuousPrintSettings.printQuality = BRLMPrintSettingsPrintQualityFast;
+            }
         }
-    }
+        if (options[@"isHalftoneErrorDiffusion"]) {
+            if ([options[@"isHalftoneErrorDiffusion"] boolValue]) {
+                continuousPrintSettings.halftone = BRLMPrintSettingsHalftoneErrorDiffusion;
+            } else {
+                continuousPrintSettings.halftone = BRLMPrintSettingsHalftoneThreshold;
+            }
+        }
+        printSettings = continuousPrintSettings;
 
+        NSLog(@"Printing with Continuous Roll settings");
+
+    } else {
+        // Se não for rolo contínuo, mantemos a lógica original com BRLMQLPrintSettings
+        BRLMQLPrintSettings *qlSettings = [[BRLMQLPrintSettings alloc] initDefaultPrintSettingsWithPrinterModel:model];
+        
+        qlSettings.autoCut = true;
+        
+        if (options[@"autoCut"]) {
+            qlSettings.autoCut = [options[@"autoCut"] boolValue];
+        }
+        if (options[@"labelSize"]) {
+            qlSettings.labelSize = [options[@"labelSize"] intValue];
+        }
+        if (options[@"isHighQuality"]) {
+            if ([options[@"isHighQuality"] boolValue]) {
+                qlSettings.printQuality = BRLMPrintSettingsPrintQualityBest;
+                NSLog(@"High Quality is enabled");
+            } else {
+                qlSettings.printQuality = BRLMPrintSettingsPrintQualityFast;
+                NSLog(@"High Quality is disabled");
+            }
+        }
+        if (options[@"isHalftoneErrorDiffusion"]) {
+            if ([options[@"isHalftoneErrorDiffusion"] boolValue]) {
+                qlSettings.halftone = BRLMPrintSettingsHalftoneErrorDiffusion;
+                NSLog(@"Error Diffusion is enabled");
+            } else {
+                qlSettings.halftone = BRLMPrintSettingsHalftoneThreshold;
+                NSLog(@"Error Diffusion is disabled");
+            }
+        }
+        printSettings = qlSettings;
+
+        NSLog(@"Printing with Die-cut Label settings");
+    }
+    
     NSLog(@"Auto Cut: %@, Label Size: %@", options[@"autoCut"], options[@"labelSize"]);
 
     NSURL *url = [NSURL URLWithString:imageStr];
-    BRLMPrintError *printError = [printerDriver printImageWithURL:url settings:qlSettings];
+    BRLMPrintError *printError = [printerDriver printImageWithURL:url settings:printSettings];
 
     if (printError.code != BRLMPrintErrorCodeNoError) {
         NSLog(@"Error - Print Image: %@", printError);
@@ -202,17 +238,6 @@ RCT_REMAP_METHOD(printImage, deviceInfo:(NSDictionary *)device printerUri: (NSSt
 - (BRPtouchDeviceInfo *) deserializeDeviceInfo:(NSDictionary *)device {
     BRPtouchDeviceInfo *deviceInfo = [[BRPtouchDeviceInfo alloc] init];
 
-//    return @{
-//        @"ipAddress": device.strIPAddress,
-//        @"location": device.strLocation,
-//        @"modelName": device.strModelName,
-//        @"printerName": device.strPrinterName,
-//        @"serialNumber": device.strSerialNumber,
-//        @"nodeName": device.strNodeName,
-//        @"macAddress": device.strMACAddress,
-//    };
-//
-//
     deviceInfo.strIPAddress = [RCTConvert NSString:device[@"ipAddress"]];
     deviceInfo.strLocation = [RCTConvert NSString:device[@"location"]];
     deviceInfo.strModelName = [RCTConvert NSString:device[@"modelName"]];
@@ -227,4 +252,3 @@ RCT_REMAP_METHOD(printImage, deviceInfo:(NSDictionary *)device printerUri: (NSSt
 }
 
 @end
-
