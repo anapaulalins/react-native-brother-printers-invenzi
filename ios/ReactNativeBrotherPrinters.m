@@ -109,83 +109,91 @@ RCT_REMAP_METHOD(printImage, deviceInfo:(NSDictionary *)device printerUri: (NSSt
     if (options[@"labelSize"]) {
     NSNumber *labelSizeNumber = options[@"labelSize"];
     
-    // Use um switch-case para mapear o número para a constante correta do SDK
     switch ([labelSizeNumber intValue]) {
         case 0:
-            qlSettings.labelSize = BRLMQLPrintSettingsLabelSizeDieCut_17mmx54mm;
+            qlSettings.labelSize = BRLMQLPrintSettingsLabelSizeDieCutW17H54;
             break;
         case 1:
-            qlSettings.labelSize = BRLMQLPrintSettingsLabelSizeDieCut_17mmx87mm;
+            qlSettings.labelSize = BRLMQLPrintSettingsLabelSizeDieCutW17H87;
             break;
         case 2:
-            qlSettings.labelSize = BRLMQLPrintSettingsLabelSizeDieCut_23mmx23mm;
+            qlSettings.labelSize = BRLMQLPrintSettingsLabelSizeDieCutW23H23;
             break;
         case 3:
-            qlSettings.labelSize = BRLMQLPrintSettingsLabelSizeDieCut_29mmx42mm;
+            qlSettings.labelSize = BRLMQLPrintSettingsLabelSizeDieCutW29H42;
             break;
         case 4:
-            qlSettings.labelSize = BRLMQLPrintSettingsLabelSizeDieCut_29mmx90mm;
+            qlSettings.labelSize = BRLMQLPrintSettingsLabelSizeDieCutW29H90;
             break;
         case 5:
-            qlSettings.labelSize = BRLMQLPrintSettingsLabelSizeDieCut_38mmx90mm;
+            qlSettings.labelSize = BRLMQLPrintSettingsLabelSizeDieCutW38H90;
             break;
         case 6:
-            qlSettings.labelSize = BRLMQLPrintSettingsLabelSizeDieCut_39mmx48mm;
+            qlSettings.labelSize = BRLMQLPrintSettingsLabelSizeDieCutW39H48;
             break;
         case 7:
-            qlSettings.labelSize = BRLMQLPrintSettingsLabelSizeDieCut_52mmx29mm;
+            qlSettings.labelSize = BRLMQLPrintSettingsLabelSizeDieCutW52H29;
             break;
         case 8:
-            qlSettings.labelSize = BRLMQLPrintSettingsLabelSizeDieCut_62mmx29mm;
+            qlSettings.labelSize = BRLMQLPrintSettingsLabelSizeDieCutW62H29;
             break;
         case 9:
-            qlSettings.labelSize = BRLMQLPrintSettingsLabelSizeDieCut_62mmx100mm;
+            qlSettings.labelSize = BRLMQLPrintSettingsLabelSizeDieCutW62H100;
             break;
         case 10:
-            qlSettings.labelSize = BRLMQLPrintSettingsLabelSizeDieCut_60mmx86mm;
+            qlSettings.labelSize = BRLMQLPrintSettingsLabelSizeDieCutW60H86;
             break;
         case 11:
-            qlSettings.labelSize = BRLMQLPrintSettingsLabelSizeDieCut_54mmx29mm;
+            qlSettings.labelSize = BRLMQLPrintSettingsLabelSizeDieCutW54H29;
             break;
         case 12:
-            qlSettings.labelSize = BRLMQLPrintSettingsLabelSizeDieCut_102mmx51mm;
+            qlSettings.labelSize = BRLMQLPrintSettingsLabelSizeDieCutW102H51;
             break;
         case 13:
-            qlSettings.labelSize = BRLMQLPrintSettingsLabelSizeDieCut_102mmx152mm;
+            qlSettings.labelSize = BRLMQLPrintSettingsLabelSizeDieCutW102H152;
             break;
         case 14:
-            qlSettings.labelSize = BRLMQLPrintSettingsLabelSizeDieCut_103mmx164mm;
+            qlSettings.labelSize = BRLMQLPrintSettingsLabelSizeDieCutW103H164;
             break;
         case 15:
-            qlSettings.labelSize = BRLMQLPrintSettingsLabelSizeRoll_12mm;
+            qlSettings.labelSize = BRLMQLPrintSettingsLabelSizeRollW12;
             break;
         case 16:
-            qlSettings.labelSize = BRLMQLPrintSettingsLabelSizeRoll_29mm;
+            qlSettings.labelSize = BRLMQLPrintSettingsLabelSizeRollW29;
             break;
         case 17:
-            qlSettings.labelSize = BRLMQLPrintSettingsLabelSizeRoll_38mm;
+            qlSettings.labelSize = BRLMQLPrintSettingsLabelSizeRollW38;
             break;
         case 18:
-            qlSettings.labelSize = BRLMQLPrintSettingsLabelSizeRoll_50mm;
+            qlSettings.labelSize = BRLMQLPrintSettingsLabelSizeRollW50;
             break;
         case 19:
-            qlSettings.labelSize = BRLMQLPrintSettingsLabelSizeRoll_54mm;
+            qlSettings.labelSize = BRLMQLPrintSettingsLabelSizeRollW54;
             break;
         case 20:
-            qlSettings.labelSize = BRLMQLPrintSettingsLabelSizeRoll_62mm;
+            qlSettings.labelSize = BRLMQLPrintSettingsLabelSizeRollW62;
             break;
         case 21:
-            qlSettings.labelSize = BRLMQLPrintSettingsLabelSizeRoll_62mm; // RB significa "Roll"
+            qlSettings.labelSize = BRLMQLPrintSettingsLabelSizeRollW62RB; // Novo valor específico
             break;
         case 22:
-            qlSettings.labelSize = BRLMQLPrintSettingsLabelSizeRoll_102mm;
+            qlSettings.labelSize = BRLMQLPrintSettingsLabelSizeRollW102;
             break;
         case 23:
-            qlSettings.labelSize = BRLMQLPrintSettingsLabelSizeRoll_103mm;
+            qlSettings.labelSize = BRLMQLPrintSettingsLabelSizeRollW103;
             break;
-        // Os demais (DT) também precisam ser mapeados.
-        // Verifique a documentação para as constantes corretas
-        
+        case 24:
+            qlSettings.labelSize = BRLMQLPrintSettingsLabelSizeDTRollW90;
+            break;
+        case 25:
+            qlSettings.labelSize = BRLMQLPrintSettingsLabelSizeDTRollW102;
+            break;
+        case 26:
+            qlSettings.labelSize = BRLMQLPrintSettingsLabelSizeDTRollW102H51;
+            break;
+        case 27:
+            qlSettings.labelSize = BRLMQLPrintSettingsLabelSizeDTRollW102H152;
+            break;
         default:
             NSLog(@"Tamanho de etiqueta desconhecido: %@", labelSizeNumber);
             break;
